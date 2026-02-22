@@ -39,7 +39,8 @@ export async function extractInvoiceData(
 
   // Step 1: Enqueue
   const formData = new FormData();
-  const blob = new Blob([pdfBuffer], { type: "application/pdf" });
+  const uint8 = new Uint8Array(pdfBuffer);
+  const blob = new Blob([uint8], { type: "application/pdf" });
   formData.append("file", blob, "invoice.pdf");
   formData.append("model_id", modelId);
 
