@@ -53,7 +53,13 @@ export default function UploadZone({ remaining }: UploadZoneProps) {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
-    accept: { "application/pdf": [".pdf"] },
+    accept: {
+      "application/pdf": [".pdf"],
+      "image/png": [".png"],
+      "image/jpeg": [".jpg", ".jpeg"],
+      "image/webp": [".webp"],
+      "image/gif": [".gif"],
+    },
     maxFiles: 1,
     disabled: uploading || remaining === 0,
   });
@@ -128,11 +134,11 @@ export default function UploadZone({ remaining }: UploadZoneProps) {
             <div>
               <p className="text-sm font-medium text-slate-700">
                 {isDragActive
-                  ? "Nometiet PDF šeit..."
-                  : "Ievelciet PDF rēķinu šeit"}
+                  ? "Nometiet failu šeit..."
+                  : "Ievelciet rēķinu šeit (PDF vai attēls)"}
               </p>
               <p className="text-xs text-slate-400 mt-1">
-                vai noklikšķiniet, lai izvēlētos failu
+                PDF, PNG, JPG, WEBP — vai noklikšķiniet, lai izvēlētos
               </p>
             </div>
           </div>

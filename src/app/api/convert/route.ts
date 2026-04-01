@@ -46,11 +46,19 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    if (file.type !== "application/pdf") {
+    const allowedTypes = [
+      "application/pdf",
+      "image/png",
+      "image/jpeg",
+      "image/webp",
+      "image/gif",
+    ];
+
+    if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
         {
           success: false,
-          error: "Atbalstīts tikai PDF formāts",
+          error: "Neatbalstīts formāts. Atbalstīti: PDF, PNG, JPG, WEBP, GIF",
           remaining: rateResult.remaining,
           xml: "",
           extractedData: null,
@@ -64,8 +72,11 @@ export async function POST(request: NextRequest) {
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
-    // Extract data with Mindee
-    const { extractedData, confidenceScore } = await extractInvoiceData(buffer);
+    // Extract data with Anthropic Claude vision
+    const { extractedData, confidenceScore } = await extractInvoiceData(
+      buffer,
+      file.type
+    );
 
     // Map to Peppol fields
     const peppolData = mapToPeppol(extractedData);
